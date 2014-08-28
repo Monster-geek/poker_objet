@@ -11,52 +11,23 @@ namespace poker_objet
     class Poker
     {
         // Attributs
-
-        // Nom du fichier de scores
-        private string nomFichier = "scores.txt";
+        private string nomFichier = "scores.txt"; // Nom du fichier de scores
+        // Fin du jeu
+        private bool fin = false;
         // Liste des combinaisons possibles
         public enum combinaison { RIEN, PAIRE, DOUBLE_PAIRE, BRELAN, QUINTE, FULL, COULEUR, CARRE, QUINTE_FLUSH };
         // Numéro des cartes a échanger
         private int[] echange = { 0, 0, 0, 0 };
-        // Le Jeux
-        Jeux MonJeux;
-
+        
 
         // Constructeur
         public Poker()
         {
-            try
+            string reponse = "";
+
+            while(true)
             {
-                MonJeux = new Jeux();
-
-                string reponse = "";
-
-                while (true)
-                {
-                    reponse = menu();
-
-                    if (reponse == "1")
-                    {
-                        MonJeux.LancerJeux();
-                        EchangeDeCarte(MonJeux, echange);
-
-                        AfficheResultat(MonJeux);
-                        enregistrer(MonJeux);
-                    }
-                    else if (reponse == "2")
-                    {
-                        AfficherScores();
-                    }
-                    else if (reponse == "3")
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                Console.ReadKey();
-                Console.Clear();
-                Poker p = new Poker();
+                reponse = menu();
             }
         }
 
@@ -68,7 +39,7 @@ namespace poker_objet
         {
             UnJeux = new Jeux();
 
-            Carte[] UnJeu = UnJeux.MonJeux;
+            Carte[] UnJeu = UnJeux.MonJeux1;
 
             int aEchanger = 0;
             bool correct = false;
@@ -157,9 +128,9 @@ namespace poker_objet
                     {
                         do
                         {
-                            tmpc.tirage();
-                            UnJeux.MonJeux[e[i] - 1] = tmpc;
-                        } while (!UnJeux.carteUnique(tmpc, e[i] - 1));
+                            tmpc = tmpc.tirage();
+                            UnJeux.MonJeux1[e[i] - 1] = tmpc;
+                        } while (!UnJeux.carteUnique(tmpc, UnJeu, e[i] - 1));
                     }
                 }
 
@@ -174,7 +145,7 @@ namespace poker_objet
         {
             unJeux = new Jeux();
 
-            Carte[] unJeu = unJeux.MonJeux;
+            Carte[] unJeu = unJeux.MonJeux1;
 
             int i, j, nbpaires = 0, nb;
 
@@ -317,10 +288,10 @@ namespace poker_objet
         {
             unJeux = new Jeux();
 
-            Carte[] unJeu = unJeux.MonJeux;
+            Carte[] unJeu = unJeux.MonJeux1;
 
             Console.Clear();
-            unJeux.AfficherMonJeu();
+            unJeux.AfficherMonJeu(unJeu);
 
             Console.Write("RESULTAT - Vous avez : ");
 
@@ -390,7 +361,7 @@ namespace poker_objet
         {
             unJeux = new Jeux();
 
-            Carte[] unJeu = unJeux.MonJeux;
+            Carte[] unJeu = unJeux.MonJeux1;
 
             bool correct = false;
             string res = "";
@@ -502,8 +473,8 @@ namespace poker_objet
                 for (j = 0; j < 5; j++)
                 {
                     Jeux unJeux = new Jeux();
-                    Carte[] unJeu = unJeux.MonJeux;
-                    unJeu[i].AffichageCarte(j, ligne);
+                    Carte[] unJeu = unJeux.MonJeux1;
+                    unJeu[i].AffichageCarte(c[j], j, ligne);
                 }
 
                 if (nbpoint == 0)
@@ -563,16 +534,10 @@ namespace poker_objet
         // Constructeur
         public Carte()
         {
-            valeur = '7';
+            valeur = '-';
             famille = 0;
             LigneDebut = 0;
             ColoneDebut = 0;
-        }
-
-        public Carte(char val, int fam)
-        {
-            valeur = val;
-            famille = fam;
         }
 
 
@@ -581,15 +546,15 @@ namespace poker_objet
         // Génère une carte
         public Carte tirage()
         {
+            // La carte à générer
+            Carte uneCarte = new Carte();
             Random r = new Random();
             // Valeur aléatoire (1 sur les 8)
-            Valeur = valeurs[r.Next(0, 7)];
+            uneCarte.Valeur = valeurs[r.Next(0, 7)];
             // Famille aléatoire (1 sur les 4)
-            Famille = familles[r.Next(0, 3)];
+            uneCarte.Famille = familles[r.Next(0, 3)];
 
-            Carte ca = new Carte(Valeur, Famille);
-            return ca;
-
+            return uneCarte;
         }
 
         //placer curseur X Y
@@ -599,11 +564,11 @@ namespace poker_objet
         }
 
         //Afficher carte
-        public void AffichageCarte(int colone, int ligne)
+        public void AffichageCarte(Carte UneCarte, int colone, int ligne)
         {
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.BackgroundColor = ConsoleColor.White;
-            switch (famille)
+            switch (UneCarte.famille)
             {
                 case 3:
                     Console.ForegroundColor = ConsoleColor.Red;
@@ -624,23 +589,23 @@ namespace poker_objet
             AllerA(colone * 15, 1 + ligne);
             Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '*', '-', '-', '-', '-', '-', '-', '-', '-', '-', '*');
             AllerA(colone * 15, 2 + ligne);
-            Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', (char)famille, ' ', (char)famille, ' ', (char)famille, ' ', (char)famille, ' ', (char)famille, '|');
+            Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', (char)UneCarte.famille, ' ', (char)UneCarte.famille, ' ', (char)UneCarte.famille, ' ', (char)UneCarte.famille, ' ', (char)UneCarte.famille, '|');
             AllerA(colone * 15, 3 + ligne);
             Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|');
             AllerA(colone * 15, 4 + ligne);
-            Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', (char)famille, ' ', ' ', ' ', ' ', ' ', ' ', ' ', (char)famille, '|');
+            Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', (char)UneCarte.famille, ' ', ' ', ' ', ' ', ' ', ' ', ' ', (char)UneCarte.famille, '|');
             AllerA(colone * 15, 5 + ligne);
-            Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', ' ', ' ', ' ', (char)valeur, (char)valeur, (char)valeur, ' ', ' ', ' ', '|');
+            Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', ' ', ' ', ' ', (char)UneCarte.valeur, (char)UneCarte.valeur, (char)UneCarte.valeur, ' ', ' ', ' ', '|');
             AllerA(colone * 15, 6 + ligne);
-            Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', (char)famille, ' ', ' ', (char)valeur, (char)valeur, (char)valeur, ' ', ' ', (char)famille, '|');
+            Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', (char)UneCarte.famille, ' ', ' ', (char)UneCarte.valeur, (char)UneCarte.valeur, (char)UneCarte.valeur, ' ', ' ', (char)UneCarte.famille, '|');
             AllerA(colone * 15, 7 + ligne);
-            Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', ' ', ' ', ' ', (char)valeur, (char)valeur, (char)valeur, ' ', ' ', ' ', '|');
+            Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', ' ', ' ', ' ', (char)UneCarte.valeur, (char)UneCarte.valeur, (char)UneCarte.valeur, ' ', ' ', ' ', '|');
             AllerA(colone * 15, 8 + ligne);
-            Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', (char)famille, ' ', ' ', ' ', ' ', ' ', ' ', ' ', (char)famille, '|');
+            Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', (char)UneCarte.famille, ' ', ' ', ' ', ' ', ' ', ' ', ' ', (char)UneCarte.famille, '|');
             AllerA(colone * 15, 9 + ligne);
             Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|');
             AllerA(colone * 15, 10 + ligne);
-            Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', (char)famille, ' ', (char)famille, ' ', (char)famille, ' ', (char)famille, ' ', (char)famille, '|');
+            Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', (char)UneCarte.famille, ' ', (char)UneCarte.famille, ' ', (char)UneCarte.famille, ' ', (char)UneCarte.famille, ' ', (char)UneCarte.famille, '|');
             AllerA(colone * 15, 11 + ligne);
             Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '*', '-', '-', '-', '-', '-', '-', '-', '-', '-', '*');
 
@@ -661,24 +626,19 @@ namespace poker_objet
     class Jeux
     {
         // Attributs
-        private Carte[] monJeux;
+        private Carte[] MonJeux;
 
         // Propriété
-        internal Carte[] MonJeux
+        internal Carte[] MonJeux1
         {
-            get { return monJeux; }
-            set { monJeux = value; }
+            get { return MonJeux; }
+            set { MonJeux = value; }
         }
 
         // Constructeur
         public Jeux()
         {
-            monJeux = new Carte[5];
-
-            for (int i = 0; i < 5; i++)
-            {
-                monJeux[i] = new Carte('7', 0);
-            }
+            MonJeux = new Carte[5];
         }
 
 
@@ -687,7 +647,7 @@ namespace poker_objet
         // Indique si une carte est déjà présente dans le jeu
         // Paramètres : une carte, le jeu 5 cartes, le numéro de la carte dans le jeu
         // Retourne un entier (booléen)
-        public bool carteUnique(Carte uneCarte, int numero)
+        public bool carteUnique(Carte uneCarte, Carte[] unJeu, int numero)
         {
             int i = 0;
             bool unique = true; // Vrai
@@ -697,7 +657,7 @@ namespace poker_objet
             {
                 if (i != numero)  // La carte ne doit pas se comparer à elle même !
                 {
-                    if ((uneCarte.Valeur == monJeux[i].Valeur) && (uneCarte.Famille == monJeux[i].Famille))
+                    if ((uneCarte.Valeur == unJeu[i].Valeur) && (uneCarte.Famille == unJeu[i].Famille))
                         unique = false;
                     else
                         i++;
@@ -711,36 +671,29 @@ namespace poker_objet
         }
 
         //Tirage du jeu
-        public void tirageDuJeu()
+        public void tirageDuJeu(Carte[] UnJeu)
         {
             Carte tmpc = new Carte();
             for (int i = 0; i < 5; i++)
             {
                 do
                 {
-                    tmpc = monJeux[i].tirage();
-                } while (!carteUnique(tmpc, i));
+                    tmpc = UnJeu[i].tirage();
+                } while (!carteUnique(tmpc, UnJeu, i));
 
-                monJeux[i] = tmpc;
+                UnJeu[i] = tmpc;
             }
         }
 
         //Affichage des 5 cartes
-        public void AfficherMonJeu()
+        public void AfficherMonJeu(Carte[] unJeu)
         {
             for (int i = 0; i < 5; i++)
             {
-                monJeux[i].AffichageCarte(i, 0);
+                unJeu[i].AffichageCarte(unJeu[i], i, 0);
             }
         }
 
-        // Fonction principqle du jeux
-        public void LancerJeux()
-        {
-            tirageDuJeu();
-            AfficherMonJeu();
-
-        }
 
     }
 
