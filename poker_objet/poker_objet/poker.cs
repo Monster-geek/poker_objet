@@ -21,8 +21,8 @@ namespace poker_objet
         // Constructeur
         public Poker()
         {
-            try
-            {
+           // try
+           // {
                 MonJeux = new Jeux();
                 string reponse = "";
                 while (true)
@@ -42,14 +42,14 @@ namespace poker_objet
                     else if (reponse == "3")
                         break;
                 }
-            }
+          /*  }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 Console.ReadKey();
                 Console.Clear();
                 Poker p = new Poker();
-            }
+            }*/
         }
         // Methodes
         //Echange de cartes
@@ -144,7 +144,6 @@ namespace poker_objet
         // La valeur retournée est un élement de l'énumération 'combinaison' (=constante)
         public combinaison cherche_combinaison(Jeux unJeux)
         {
-            unJeux = new Jeux();
             Carte[] unJeu = unJeux.MonJeux;
             int i, j, nbpaires = 0, nb;
             // Nombre de valeurs similaires dans le jeu pour chaque carte
@@ -327,7 +326,6 @@ namespace poker_objet
         // Demander si enregistrer ou non
         public void enregistrer(Jeux unJeux)
         {
-            unJeux = new Jeux();
             Carte[] unJeu = unJeux.MonJeux;
             bool correct = false;
             string res = "";
@@ -379,13 +377,14 @@ namespace poker_objet
                 i++;
             }
             i = 0;
-            int position = i;
+            int position = 0;
+            position = i;
             do
             {
-                Carte[] c = new Carte[5];
+                Carte[] c = MonJeux.MonJeux;
                 string nom = "";
                 int nbpoint = 11;
-                for (i = position; i < tab.Length; i++)
+                for (i = position; i < tab.Length-1; i++)
                 {
                     if (tab[i] == ';')
                     { nbpoint--; break; }
@@ -415,9 +414,8 @@ namespace poker_objet
                 Console.WriteLine(nom + " :");
                 for (j = 0; j < 5; j++)
                 {
-                    Jeux unJeux = new Jeux();
-                    Carte[] unJeu = unJeux.MonJeux;
-                    unJeu[i].AffichageCarte(j, ligne);
+                    Carte[] unJeu = MonJeux.MonJeux;
+                    unJeu[j].AffichageCarte(j, ligne);
                 }
                 if (nbpoint == 0)
                 {
@@ -428,7 +426,7 @@ namespace poker_objet
                 // 26
                 // 51
                 // 76
-            } while (position < tab.Length);
+            } while (position < tab.Length-2);
             br.Close();
             Console.ReadKey();
         }
