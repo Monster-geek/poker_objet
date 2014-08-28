@@ -55,8 +55,6 @@ namespace poker_objet
         //Echange de cartes
         public void EchangeDeCarte(Jeux UnJeux, int[] e)
         {
-            UnJeux = new Jeux();
-            Carte[] UnJeu = UnJeux.MonJeux;
             int aEchanger = 0;
             bool correct = false;
             bool fin = false;
@@ -156,10 +154,10 @@ namespace poker_objet
             bool brelan = false;
             // Possibilités de quinte. Tableau 4*5
             char[,] quintes = { {'X','V','D','R','A'},
-{'9','X','V','D','R'},
-{'8','9','X','V','D'},
-{'7','8','9','X','V'}
-};
+                                {'9','X','V','D','R'},
+                                {'8','9','X','V','D'},
+                                {'7','8','9','X','V'}
+                                };
             // Résultat à renvoyer
             combinaison resultat;
             // Par défaut : aucun jeu
@@ -269,8 +267,6 @@ namespace poker_objet
         //Calcul et affichage du résultat
         public void AfficheResultat(Jeux unJeux)
         {
-            unJeux = new Jeux();
-            Carte[] unJeu = unJeux.MonJeux;
             Console.Clear();
             unJeux.AfficherMonJeu();
             Console.Write("RESULTAT - Vous avez : ");
