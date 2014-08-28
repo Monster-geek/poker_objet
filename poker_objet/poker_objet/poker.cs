@@ -21,8 +21,8 @@ namespace poker_objet
         // Constructeur
         public Poker()
         {
-           // try
-           // {
+            try
+            {
                 MonJeux = new Jeux();
                 string reponse = "";
                 while (true)
@@ -42,14 +42,14 @@ namespace poker_objet
                     else if (reponse == "3")
                         break;
                 }
-          /*  }
+            }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 Console.ReadKey();
                 Console.Clear();
                 Poker p = new Poker();
-            }*/
+            }
         }
         // Methodes
         //Echange de cartes
@@ -131,9 +131,9 @@ namespace poker_objet
                     {
                         do
                         {
-                            tmpc.tirage();
-                            UnJeux.MonJeux[e[i] - 1] = tmpc;
-                        } while (!UnJeux.carteUnique(tmpc, e[i] - 1));
+                            tmpc = MonJeux.MonJeux[e[i]-1].tirage();
+                           // UnJeux.MonJeux[e[i] - 1] = tmpc;
+                        } while (!MonJeux.carteUnique(tmpc, e[i] - 1));
                     }
                 }
                 Console.Clear();
@@ -431,6 +431,7 @@ namespace poker_objet
             Console.ReadKey();
         }
     }
+
     // Classe de l'objet carte
     class Carte
     {
@@ -537,6 +538,7 @@ namespace poker_objet
             Console.ForegroundColor = ConsoleColor.White;
         }
     }
+
     // Classe du jeux contenant les 5 cartes
     class Jeux
     {
