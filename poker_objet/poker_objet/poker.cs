@@ -10,20 +10,37 @@ namespace poker_objet
     // fonction principale
     class Poker
     {
+        // Attributs
         private string nomFichier = "scores.txt"; // Nom du fichier de scores
-
         // Fin du jeu
-        public bool fin = false;
-
+        private bool fin = false;
         // Liste des combinaisons possibles
         public enum combinaison { RIEN, PAIRE, DOUBLE_PAIRE, BRELAN, QUINTE, FULL, COULEUR, CARRE, QUINTE_FLUSH };
-
         // Numéro des cartes a échanger
-        public int[] echange = { 0, 0, 0, 0 };
+        private int[] echange = { 0, 0, 0, 0 };
+        
+
+        // Constructeur
+        public Poker()
+        {
+            string reponse = "";
+
+            while(true)
+            {
+                reponse = menu();
+            }
+        }
+
+
+        // Methodes
 
         //Echange de cartes
-        public void EchangeDeCarte(Carte[] UnJeu, int[] e)
+        public void EchangeDeCarte(Jeux UnJeux, int[] e)
         {
+            UnJeux = new Jeux();
+
+            Carte[] UnJeu = UnJeux.MonJeux1;
+
             int aEchanger = 0;
             bool correct = false;
             bool fin = false;
@@ -112,8 +129,8 @@ namespace poker_objet
                         do
                         {
                             tmpc = tmpc.tirage();
-                            UnJeu[e[i] - 1] = tmpc;
-                        } while (!carteUnique(tmpc, UnJeu, e[i] - 1));
+                            UnJeux.MonJeux1[e[i] - 1] = tmpc;
+                        } while (!UnJeux.carteUnique(tmpc, UnJeu, e[i] - 1));
                     }
                 }
 
@@ -124,8 +141,12 @@ namespace poker_objet
         // Calcule et retourne la COMBINAISON (paire, double-paire... , quinte-flush)
         // pour un jeu complet de 5 cartes.
         // La valeur retournée est un élement de l'énumération 'combinaison' (=constante)
-        public combinaison cherche_combinaison(Carte[] unJeu)
+        public combinaison cherche_combinaison(Jeux unJeux)
         {
+            unJeux = new Jeux();
+
+            Carte[] unJeu = unJeux.MonJeux1;
+
             int i, j, nbpaires = 0, nb;
 
             // Nombre de valeurs similaires dans le jeu pour chaque carte
@@ -263,16 +284,20 @@ namespace poker_objet
         }
 
         //Calcul et affichage du résultat
-        public void AfficheResultat(Carte[] Unjeu)
+        public void AfficheResultat(Jeux unJeux)
         {
+            unJeux = new Jeux();
+
+            Carte[] unJeu = unJeux.MonJeux1;
+
             Console.Clear();
-            AfficherMonJeu(Unjeu);
+            unJeux.AfficherMonJeu(unJeu);
 
             Console.Write("RESULTAT - Vous avez : ");
 
             Console.ForegroundColor = ConsoleColor.Red;
             // Test de la combinaison
-            switch (cherche_combinaison(Unjeu))
+            switch (cherche_combinaison(unJeux))
             {
                 case combinaison.RIEN:
                     Console.WriteLine("rien du tout... desole!"); break;
@@ -332,8 +357,12 @@ namespace poker_objet
         }
 
         // Demander si enregistrer ou non
-        public void enregistrer(Carte[] unJeu)
+        public void enregistrer(Jeux unJeux)
         {
+            unJeux = new Jeux();
+
+            Carte[] unJeu = unJeux.MonJeux1;
+
             bool correct = false;
             string res = "";
             string nom, ligne = "";
@@ -443,7 +472,9 @@ namespace poker_objet
 
                 for (j = 0; j < 5; j++)
                 {
-                    AffichageCarte(c[j], j, ligne);
+                    Jeux unJeux = new Jeux();
+                    Carte[] unJeu = unJeux.MonJeux1;
+                    unJeu[i].AffichageCarte(c[j], j, ligne);
                 }
 
                 if (nbpoint == 0)
@@ -494,10 +525,10 @@ namespace poker_objet
 
 
         // Valeurs des cartes : As, Roi,...
-        public char[] valeurs = { 'A', 'R', 'D', 'V', 'X', '9', '8', '7' };
+        private char[] valeurs = { 'A', 'R', 'D', 'V', 'X', '9', '8', '7' };
 
         // Codes ASCII (3 : coeur, 4 : carreau, 5 : trèfle, 6 : pique)
-        public int[] familles = { 3, 4, 5, 6 };
+        private int[] familles = { 3, 4, 5, 6 };
 
 
         // Constructeur
@@ -505,6 +536,8 @@ namespace poker_objet
         {
             valeur = '-';
             famille = 0;
+            LigneDebut = 0;
+            ColoneDebut = 0;
         }
 
 
@@ -594,7 +627,6 @@ namespace poker_objet
     {
         // Attributs
         private Carte[] MonJeux;
-         
 
         // Propriété
         internal Carte[] MonJeux1
@@ -602,7 +634,6 @@ namespace poker_objet
             get { return MonJeux; }
             set { MonJeux = value; }
         }
-
 
         // Constructeur
         public Jeux()
