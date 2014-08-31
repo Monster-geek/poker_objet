@@ -1,1 +1,7 @@
 C:\Users\Alex\Documents\GitHub\poker_objet\poker_objet\poker_objet\bin\Debug\poker_objet.exe.config
+D:\Git\poker_objet\poker_objet\poker_objet\bin\Debug\poker_objet.exe.config
+D:\Git\poker_objet\poker_objet\poker_objet\bin\Debug\poker_objet.exe
+D:\Git\poker_objet\poker_objet\poker_objet\bin\Debug\poker_objet.pdb
+D:\Git\poker_objet\poker_objet\poker_objet\obj\Debug\poker_objet.csprojResolveAssemblyReference.cache
+D:\Git\poker_objet\poker_objet\poker_objet\obj\Debug\poker_objet.exe
+D:\Git\poker_objet\poker_objet\poker_objet\obj\Debug\poker_objet.pdb

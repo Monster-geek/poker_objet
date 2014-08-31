@@ -10,6 +10,7 @@ namespace poker_objet
     {
         static void Main(string[] args)
         {
+            Poker p = new Poker();
         }
     }
 }
