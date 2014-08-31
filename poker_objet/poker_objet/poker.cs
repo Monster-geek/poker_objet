@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 namespace poker_objet
 {
     // fonction principale
@@ -131,8 +132,8 @@ namespace poker_objet
                     {
                         do
                         {
-                            tmpc = MonJeux.MonJeux[e[i]-1].tirage();
-                           // UnJeux.MonJeux[e[i] - 1] = tmpc;
+                            tmpc = MonJeux.MonJeux[e[i] - 1].tirage();
+                            // UnJeux.MonJeux[e[i] - 1] = tmpc;
                         } while (!MonJeux.carteUnique(tmpc, e[i] - 1));
                     }
                 }
@@ -330,10 +331,10 @@ namespace poker_objet
             bool correct = false;
             string res = "";
             string nom, ligne = "";
-            BinaryWriter f = null;
+            StreamWriter f = null;
             FileStream fs = null;
             fs = new FileStream(nomFichier, FileMode.Append, FileAccess.Write);
-            f = new BinaryWriter(fs);
+            f = new StreamWriter(fs);
             do
             {
                 Console.Write("Enregistrer le jeu ? ( O / N ) : ");
@@ -352,262 +353,83 @@ namespace poker_objet
                 {
                     ligne += ";" + unJeu[i].Famille.ToString() + ";" + unJeu[i].Valeur;
                 }
-                f.Write(nom + ligne);
+                f.Write(nom + ligne + ";" + "\r\n");
             }
             f.Close();
         }
         // Afficher score
         public void AfficherScores()
         {
-            BinaryReader br = null;
+            StreamReader br = null;
             FileStream fs = null;
             fs = new FileStream(nomFichier, FileMode.Open, FileAccess.Read);
             if (fs == null)
             {
                 throw new Exception("Ouverture impossible de " + nomFichier);
             }
-            br = new BinaryReader(fs);
+            br = new StreamReader(fs);
             int ligne = 0;
-            fs.Seek(1, SeekOrigin.Begin);
-            char[] tab = new char[fs.Length];
-            int i = 0;
-            while (fs.Position < fs.Length & i < fs.Length)
-            {
-                tab[i] = br.ReadChar();
-                i++;
-            }
-            i = 0;
-            int position = 0;
-            position = i;
-            do
-            {
-                Carte[] c = MonJeux.MonJeux;
-                string nom = "";
-                int nbpoint = 11;
-                for (i = position; i < tab.Length-1; i++)
-                {
-                    if (tab[i] == ';')
-                    { nbpoint--; break; }
-                    nom += tab[i];
-                }
-                int a = 0;
-                int j = 0;
-                while (j < 5)
-                {
-                    if (tab[i] != ';' & a == 0)
-                    {
-                        c[j].Famille = int.Parse(tab[i].ToString());
-                        a = 1;
-                    }
-                    else if (tab[i] != ';' & a == 1)
-                    {
-                        c[j].Valeur = tab[i];
-                        a = 0;
-                    }
-                    else if (tab[i] == ';')
-                        nbpoint--;
-                    if (c[j].Famille != '\0' && c[j].Valeur != '\0')
-                        j++;
-                    i++;
-                }
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(nom + " :");
-                for (j = 0; j < 5; j++)
-                {
-                    Carte[] unJeu = MonJeux.MonJeux;
-                    unJeu[j].AffichageCarte(j, ligne);
-                }
-                if (nbpoint == 0)
-                {
-                    ligne++;
-                }
-                ligne += 14;
-                position = i + 1;
-                // 26
-                // 51
-                // 76
-            } while (position < tab.Length-2);
-            br.Close();
-            Console.ReadKey();
-        }
-    }
 
-    // Classe de l'objet carte
-    class Carte
-    {
-        // Attributs
-        private char valeur;
-        private int famille;
-        //Coordonnées
-        private int LigneDebut;
-        private int ColoneDebut;
-        // Propriété
-        public char Valeur
-        {
-            get { return valeur; }
-            set { valeur = value; }
-        }
-        public int Famille
-        {
-            get { return famille; }
-            set { famille = value; }
-        }
-        // Valeurs des cartes : As, Roi,...
-        private char[] valeurs = { 'A', 'R', 'D', 'V', 'X', '9', '8', '7' };
-        // Codes ASCII (3 : coeur, 4 : carreau, 5 : trèfle, 6 : pique)
-        private int[] familles = { 3, 4, 5, 6 };
-        // Constructeur
-        public Carte()
-        {
-            valeur = '7';
-            famille = 0;
-            LigneDebut = 0;
-            ColoneDebut = 0;
-        }
-        public Carte(char val, int fam)
-        {
-            valeur = val;
-            famille = fam;
-        }
-        // Methodes
-        // Génère une carte
-        public Carte tirage()
-        {
-            Random r = new Random();
-            // Valeur aléatoire (1 sur les 8)
-            Valeur = valeurs[r.Next(0, 7)];
-            // Famille aléatoire (1 sur les 4)
-            Famille = familles[r.Next(0, 3)];
-            Carte ca = new Carte(Valeur, Famille);
-            return ca;
-        }
-        //placer curseur X Y
-        public void AllerA(int x, int y)
-        {
-            Console.SetCursorPosition(x + ColoneDebut, y + LigneDebut);
-        }
-        //Afficher carte
-        public void AffichageCarte(int colone, int ligne)
-        {
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.BackgroundColor = ConsoleColor.White;
-            switch (famille)
-            {
-                case 3:
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    break;
-                case 4:
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    break;
-                case 5:
-                    Console.ForegroundColor = ConsoleColor.Black;
-                    break;
-                case 6:
-                    Console.ForegroundColor = ConsoleColor.Black;
-                    break;
-            }
-            // Affichage de la carte
-            AllerA(colone * 15, 1 + ligne);
-            Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '*', '-', '-', '-', '-', '-', '-', '-', '-', '-', '*');
-            AllerA(colone * 15, 2 + ligne);
-            Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', (char)famille, ' ', (char)famille, ' ', (char)famille, ' ', (char)famille, ' ', (char)famille, '|');
-            AllerA(colone * 15, 3 + ligne);
-            Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|');
-            AllerA(colone * 15, 4 + ligne);
-            Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', (char)famille, ' ', ' ', ' ', ' ', ' ', ' ', ' ', (char)famille, '|');
-            AllerA(colone * 15, 5 + ligne);
-            Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', ' ', ' ', ' ', (char)valeur, (char)valeur, (char)valeur, ' ', ' ', ' ', '|');
-            AllerA(colone * 15, 6 + ligne);
-            Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', (char)famille, ' ', ' ', (char)valeur, (char)valeur, (char)valeur, ' ', ' ', (char)famille, '|');
-            AllerA(colone * 15, 7 + ligne);
-            Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', ' ', ' ', ' ', (char)valeur, (char)valeur, (char)valeur, ' ', ' ', ' ', '|');
-            AllerA(colone * 15, 8 + ligne);
-            Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', (char)famille, ' ', ' ', ' ', ' ', ' ', ' ', ' ', (char)famille, '|');
-            AllerA(colone * 15, 9 + ligne);
-            Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|');
-            AllerA(colone * 15, 10 + ligne);
-            Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', (char)famille, ' ', (char)famille, ' ', (char)famille, ' ', (char)famille, ' ', (char)famille, '|');
-            AllerA(colone * 15, 11 + ligne);
-            Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '*', '-', '-', '-', '-', '-', '-', '-', '-', '-', '*');
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            AllerA((colone * 15) + 5, 12 + ligne);
-            Console.Write("{0}", colone + 1);
-            Console.WriteLine("\n");
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.White;
-        }
-    }
+            //string tab = br.ReadToEnd();
 
-    // Classe du jeux contenant les 5 cartes
-    class Jeux
-    {
-        // Attributs
-        private Carte[] monJeux;
-        // Propriété
-        internal Carte[] MonJeux
-        {
-            get { return monJeux; }
-            set { monJeux = value; }
-        }
-        // Constructeur
-        public Jeux()
-        {
-            monJeux = new Carte[5];
-            for (int i = 0; i < 5; i++)
+            string tab;
+
+            while ((tab = br.ReadLine()) != null)
             {
-                monJeux[i] = new Carte('7', 0);
-            }
-        }
-        // Methodes
-        // Indique si une carte est déjà présente dans le jeu
-        // Paramètres : une carte, le jeu 5 cartes, le numéro de la carte dans le jeu
-        // Retourne un entier (booléen)
-        public bool carteUnique(Carte uneCarte, int numero)
-        {
-            int i = 0;
-            bool unique = true; // Vrai
-            // Parcours du Jeu à la recherche de la carte
-            do
-            {
-                if (i != numero) // La carte ne doit pas se comparer à elle même !
-                {
-                    if ((uneCarte.Valeur == monJeux[i].Valeur) && (uneCarte.Famille == monJeux[i].Famille))
-                        unique = false;
-                    else
-                        i++;
-                }
-                else
-                    i++;
-            } while (unique && i < 5);
-            return unique;
-        }
-        //Tirage du jeu
-        public void tirageDuJeu()
-        {
-            Carte tmpc = new Carte();
-            for (int i = 0; i < 5; i++)
-            {
+                int i = 0;
+                int position = 0;
+                position = i;
                 do
                 {
-                    tmpc = monJeux[i].tirage();
-                } while (!carteUnique(tmpc, i));
-                monJeux[i] = tmpc;
+                    Carte[] c = MonJeux.MonJeux;
+                    string nom = "";
+                    int nbpoint = 11;
+                    for (i = position; i < tab.Length-1; i++)
+                    {
+                        if (tab[i] == ';')
+                        { nbpoint--; break; }
+                        nom += tab[i];
+                    }
+                    int a = 0;
+                    int j = 0;
+                    while (j < 5)
+                    {
+                        if (tab[i] != ';' && a == 0)
+                        {
+                            c[j].Famille = int.Parse(tab[i].ToString());
+                            a = 1;
+                        }
+                        else if (tab[i] != ';' && a == 1)
+                        {
+                            c[j].Valeur = tab[i];
+                            a = 0;
+                        }
+                        else if (tab[i] == ';')
+                            nbpoint--;
+                        if (c[j].Famille != '\0' && c[j].Valeur != '\0')
+                            j++;
+                        i++;
+                    }
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(nom + " :");
+                    for (j = 0; j < 5; j++)
+                    {
+                        Carte[] unJeu = MonJeux.MonJeux;
+                        unJeu[j].AffichageCarte(j, ligne);
+                    }
+                    if (nbpoint == 0)
+                    {
+                        ligne++;
+                    }
+                    ligne += 14;
+                    position = i + 1;
+                    // 26
+                    // 51
+                    // 76
+                } while (position < tab.Length - 2);
             }
-        }
-        //Affichage des 5 cartes
-        public void AfficherMonJeu()
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                monJeux[i].AffichageCarte(i, 0);
-            }
-        }
-        // Fonction principqle du jeux
-        public void LancerJeux()
-        {
-            tirageDuJeu();
-            AfficherMonJeu();
+            br.Close();
+            Console.ReadKey();
         }
     }
 }
