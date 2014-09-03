@@ -331,10 +331,10 @@ namespace poker_objet
             bool correct = false;
             string res = "";
             string nom, ligne = "";
-            StreamWriter f = null;
+            StreamWriter f = null; //Anciennement BinaryWriter
             FileStream fs = null;
             fs = new FileStream(nomFichier, FileMode.Append, FileAccess.Write);
-            f = new StreamWriter(fs);
+            f = new StreamWriter(fs); //Anciennement BinaryWriter
             do
             {
                 Console.Write("Enregistrer le jeu ? ( O / N ) : ");
