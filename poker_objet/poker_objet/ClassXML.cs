@@ -17,6 +17,9 @@ namespace poker_objet
 
         public void EcrireSurXML(string Nom, string carte1Famille, string carte1Valeur, string carte2Famille, string carte2Valeur, string carte3Famille, string carte3Valeur, string carte4Famille, string carte4Valeur, string carte5Famille, string carte5Valeur, string resultat)
         {
+            List<List<string>> listeDeListe = new List<List<string>>();
+            listeDeListe = ExtraireXML();
+
             List<string> listeNom = new List<string>();
             listeNom.Add(Nom);
             List<string> listecarte1Famille = new List<string>();
@@ -41,7 +44,7 @@ namespace poker_objet
             listecarte5Valeur.Add(carte5Valeur);
             List<string> listeResultat = new List<string>();
             listeResultat.Add(resultat);
-            List<List<string>> listeDeListe = new List<List<string>>();
+            
             listeDeListe.Add(listeNom);
             listeDeListe.Add(listecarte1Famille);
             listeDeListe.Add(listecarte1Valeur);
@@ -55,10 +58,13 @@ namespace poker_objet
             listeDeListe.Add(listecarte5Valeur);
             listeDeListe.Add(listeResultat);
 
-           try
+            try
             {
-                if (File.Exists("score.xml")) // Suppression du fichier si existant
+                //Suppression du fichier si existant
+                if (File.Exists("score.xml"))
+                {       
                     File.Delete("score.xml");
+                }
 
                 Writer = new XmlTextWriter("score.xml", null); // Utilisation du fichier
                 Writer.Formatting = Formatting.Indented;
@@ -117,7 +123,7 @@ namespace poker_objet
                     Writer.WriteStartElement("resultat");
                     Writer.WriteString(listeDeListe[11][i]);
                     Writer.WriteEndElement();
-                    
+
 
                     Writer.WriteEndElement();
                 }

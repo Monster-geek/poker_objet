@@ -345,7 +345,7 @@ namespace poker_objet
           //  FileStream fs = null;
            // fs = new FileStream(nomFichier, FileMode.Append, FileAccess.Write);
           //  f = new StreamWriter(fs); //Anciennement BinaryWriter
-            do
+            while(!correct)
             {
                 Console.Write("Enregistrer le jeu ? ( O / N ) : ");
                 string tmp = Console.ReadLine().ToUpper();
@@ -353,7 +353,7 @@ namespace poker_objet
                 { correct = true; res = tmp; }
                 else
                     correct = false;
-            } while (!correct);
+            }
             if (res == "O")
             {
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
