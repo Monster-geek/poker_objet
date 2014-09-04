@@ -1,17 +1,17 @@
 <?xml version="1.0" standalone="yes"?>
 <scores>
   <score>
-    <nom>FERGT</nom>
-    <carte1Famille>3</carte1Famille>
+    <nom>DAVID</nom>
+    <carte1Famille>4</carte1Famille>
     <carte1Valeur>8</carte1Valeur>
-    <carte2Famille>4</carte2Famille>
-    <carte2Valeur>X</carte2Valeur>
-    <carte3Famille>3</carte3Famille>
-    <carte3Valeur>A</carte3Valeur>
-    <carte4Famille>5</carte4Famille>
-    <carte4Valeur>R</carte4Valeur>
-    <carte5Famille>3</carte5Famille>
-    <carte5Valeur>R</carte5Valeur>
-    <resultat>rien du tout... desole!</resultat>
+    <carte2Famille>3</carte2Famille>
+    <carte2Valeur>D</carte2Valeur>
+    <carte3Famille>4</carte3Famille>
+    <carte3Valeur>R</carte3Valeur>
+    <carte4Famille>3</carte4Famille>
+    <carte4Valeur>8</carte4Valeur>
+    <carte5Famille>5</carte5Famille>
+    <carte5Valeur>8</carte5Valeur>
+    <resultat>une simple paire...</resultat>
   </score>
 </scores>

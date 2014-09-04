@@ -382,75 +382,48 @@ namespace poker_objet
         // Afficher score
         public void AfficherScores()
         {
-            StreamReader br = null;
-            FileStream fs = null;
-            fs = new FileStream(nomFichier, FileMode.Open, FileAccess.Read);
-            if (fs == null)
+            Carte[] c = {null, null, null, null, null};
+
+            for(int ii = 0; ii < 5; ii++)
             {
-                throw new Exception("Ouverture impossible de " + nomFichier);
+                c[ii] = new Carte();
             }
-            br = new StreamReader(fs);
+
+            List<List<string>> liste = new List<List<string>>();
+
+            liste = connexionXML.ExtraireXML();
+
+            string nom = liste[0][0];
+
             int ligne = 0;
 
-            //string tab = br.ReadToEnd();
-
-            string tab;
-
-            while ((tab = br.ReadLine()) != null)
+            int i = 0;
+            int j = 0;
+            int x = 1;
+            while (j < 5)
             {
-                int i = 0;
-                int position = 0;
-                position = i;
-                do
-                {
-                    Carte[] c = MonJeux.MonJeux;
-                    string nom = "";
-                    int nbpoint = 11;
-                    for (i = position; i < tab.Length-1; i++)
-                    {
-                        if (tab[i] == ';')
-                        { nbpoint--; break; }
-                        nom += tab[i];
-                    }
-                    int a = 0;
-                    int j = 0;
-                    while (j < 5)
-                    {
-                        if (tab[i] != ';' && a == 0)
-                        {
-                            c[j].Famille = int.Parse(tab[i].ToString());
-                            a = 1;
-                        }
-                        else if (tab[i] != ';' && a == 1)
-                        {
-                            c[j].Valeur = tab[i];
-                            a = 0;
-                        }
-                        else if (tab[i] == ';')
-                            nbpoint--;
-                        if (c[j].Famille != '\0' && c[j].Valeur != '\0')
-                            j++;
-                        i++;
-                    }
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine(nom + " :");
-                    for (j = 0; j < 5; j++)
-                    {
-                        Carte[] unJeu = MonJeux.MonJeux;
-                        unJeu[j].AffichageCarte(j, ligne);
-                    }
-                    if (nbpoint == 0)
-                    {
-                        ligne++;
-                    }
-                    ligne += 14;
-                    position = i + 1;
-                    // 26
-                    // 51
-                    // 76
-                } while (position < tab.Length - 2);
+
+                    c[j].Famille = int.Parse(liste[x][0].ToString());
+                    c[j].Valeur = char.Parse(liste[x+1][0]);
+                j++;
+                x += 2;
             }
-            br.Close();
+            int position = 0;
+            do{
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(nom + " :");
+                for (j = 0; j < 5; j++)
+                {
+                    c[j].AffichageCarte(j, ligne);
+                }
+
+                Console.WriteLine(liste[11][0]);
+                ligne += 14;
+                position = i + 1;
+                // 26
+                // 51
+                // 76
+            } while (position < liste[0].Count - 2);
 
             Console.ReadKey();
         }
