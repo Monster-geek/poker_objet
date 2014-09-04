@@ -22,62 +22,78 @@ namespace poker_objet
             try
             {
 
-                if (File.Exists("Logiciels.xml")) // Suppression du fichier si existant
-                    File.Delete("Logiciels.xml");
+                if (File.Exists("score.xml")) // Suppression du fichier si existant
+                    File.Delete("score.xml");
 
-                Writer = new XmlTextWriter("Logiciels.xml", null); // Utilisation du fichier
+                Writer = new XmlTextWriter("score.xml", null); // Utilisation du fichier
                 Writer.Formatting = Formatting.Indented;
 
                 Writer.WriteStartDocument(true);
-                Writer.WriteStartElement("Logiciels");
+                Writer.WriteStartElement("scores");
 
                 for (int i = 0; i < listeDeListe[0].Count; i++) // Réécriture du fichier XML précédent
                 {
-                    Writer.WriteStartElement("Logiciel");
+                    Writer.WriteStartElement("score");
 
                     Writer.WriteStartElement("nom");
                     Writer.WriteString(listeDeListe[0][i]);
                     Writer.WriteEndElement();
 
-                    Writer.WriteStartElement("URL_DL");
+                    Writer.WriteStartElement("carte1");
                     Writer.WriteString(listeDeListe[1][i]);
                     Writer.WriteEndElement();
 
-                    Writer.WriteStartElement("URL_Version");
+                    Writer.WriteStartElement("carte2");
                     Writer.WriteString(listeDeListe[2][i]);
                     Writer.WriteEndElement();
 
-                    Writer.WriteStartElement("version");
+                    Writer.WriteStartElement("carte3");
                     Writer.WriteString(listeDeListe[3][i]);
                     Writer.WriteEndElement();
 
-                    Writer.WriteStartElement("nbLigne");
+                    Writer.WriteStartElement("carte4");
+                    Writer.WriteString(listeDeListe[3][i]);
+                    Writer.WriteEndElement();
+
+                    Writer.WriteStartElement("carte5");
+                    Writer.WriteString(listeDeListe[3][i]);
+                    Writer.WriteEndElement();
+
+                    Writer.WriteStartElement("Resultat");
                     Writer.WriteString(listeDeListe[4][i]);
                     Writer.WriteEndElement();
 
                     Writer.WriteEndElement();
                 }
 
-                Writer.WriteStartElement("Logiciel");
+                Writer.WriteStartElement("score");
 
                 Writer.WriteStartElement("nom");
-                Writer.WriteString(NomLogiciel);
+                Writer.WriteString(listeDeListe[0][i]);
                 Writer.WriteEndElement();
 
-                Writer.WriteStartElement("URL_DL");
-                Writer.WriteString(URL_DL);
+                Writer.WriteStartElement("carte1");
+                Writer.WriteString(listeDeListe[1][i]);
                 Writer.WriteEndElement();
 
-                Writer.WriteStartElement("URL_Version");
-                Writer.WriteString(URL_version);
+                Writer.WriteStartElement("carte2");
+                Writer.WriteString(listeDeListe[2][i]);
                 Writer.WriteEndElement();
 
-                Writer.WriteStartElement("version");
-                Writer.WriteString(version);
+                Writer.WriteStartElement("carte3");
+                Writer.WriteString(listeDeListe[3][i]);
                 Writer.WriteEndElement();
 
-                Writer.WriteStartElement("nbLigne");
-                Writer.WriteString(nbLigne);
+                Writer.WriteStartElement("carte4");
+                Writer.WriteString(listeDeListe[3][i]);
+                Writer.WriteEndElement();
+
+                Writer.WriteStartElement("carte5");
+                Writer.WriteString(listeDeListe[3][i]);
+                Writer.WriteEndElement();
+
+                Writer.WriteStartElement("Resultat");
+                Writer.WriteString(listeDeListe[4][i]);
                 Writer.WriteEndElement();
 
                 Writer.WriteEndElement();
@@ -100,36 +116,44 @@ namespace poker_objet
         {
             try
             {
-                if (File.Exists("Logiciels.xml")) // Suppression du fichier si existant
-                    File.Delete("Logiciels.xml");
+                if (File.Exists("score.xml")) // Suppression du fichier si existant
+                    File.Delete("score.xml");
 
-                Writer = new XmlTextWriter("Logiciels.xml", null); // Utilisation du fichier
+                Writer = new XmlTextWriter("score.xml", null); // Utilisation du fichier
                 Writer.Formatting = Formatting.Indented;
 
                 Writer.WriteStartDocument(true);
-                Writer.WriteStartElement("Logiciels");
+                Writer.WriteStartElement("scores");
 
                 for (int i = 0; i < listeDeListe[0].Count; i++) // Réécriture du fichier XML précédent
                 {
-                    Writer.WriteStartElement("Logiciel");
+                    Writer.WriteStartElement("score");
 
                     Writer.WriteStartElement("nom");
                     Writer.WriteString(listeDeListe[0][i]);
                     Writer.WriteEndElement();
 
-                    Writer.WriteStartElement("URL_DL");
+                    Writer.WriteStartElement("carte1");
                     Writer.WriteString(listeDeListe[1][i]);
                     Writer.WriteEndElement();
 
-                    Writer.WriteStartElement("URL_Version");
+                    Writer.WriteStartElement("carte2");
                     Writer.WriteString(listeDeListe[2][i]);
                     Writer.WriteEndElement();
 
-                    Writer.WriteStartElement("version");
+                    Writer.WriteStartElement("carte3");
                     Writer.WriteString(listeDeListe[3][i]);
                     Writer.WriteEndElement();
 
-                    Writer.WriteStartElement("nbLigne");
+                    Writer.WriteStartElement("carte4");
+                    Writer.WriteString(listeDeListe[3][i]);
+                    Writer.WriteEndElement();
+
+                    Writer.WriteStartElement("carte5");
+                    Writer.WriteString(listeDeListe[3][i]);
+                    Writer.WriteEndElement();
+
+                    Writer.WriteStartElement("Resultat");
                     Writer.WriteString(listeDeListe[4][i]);
                     Writer.WriteEndElement();
 
@@ -152,16 +176,18 @@ namespace poker_objet
         public List<List<string>> ExtraireXML()
         {
             List<string> listeNom = new List<string>();
-            List<string> listeURLDL = new List<string>();
-            List<string> listeURLversion = new List<string>();
-            List<string> listeVersion = new List<string>();
-            List<string> listeNbLigne = new List<string>();
+            List<string> listecarte1 = new List<string>();
+            List<string> listecarte2 = new List<string>();
+            List<string> listecarte3 = new List<string>();
+            List<string> listecarte4 = new List<string>();
+            List<string> listecarte5 = new List<string>();
+            List<string> listeResultat = new List<string>();
             List<List<string>> listeUltime = new List<List<string>>();
 
             try
             {
                 // a. Instancier les attributs de lecture
-                sr = new StreamReader("Logiciels.xml");
+                sr = new StreamReader("score.xml");
                 this.Reader = new XmlTextReader(sr);
 
                 // b. Instancier le "cache" XML
@@ -169,23 +195,28 @@ namespace poker_objet
                 cache.Load(this.Reader);
 
                 // c. Récupérer une collection de balise <Logiciel>...
-                XmlNodeList lesLogiciels = cache.SelectNodes("Logiciels/Logiciel");   // xmlNode = Balise XML
+                XmlNodeList lesLogiciels = cache.SelectNodes("scores/score");   // xmlNode = Balise XML
 
                 // d. Parcours de la collection de balises
                 foreach (XmlNode balise in lesLogiciels)
                 {
                     listeNom.Add(balise.SelectSingleNode("nom").InnerText);
-                    listeURLDL.Add(balise.SelectSingleNode("URL_DL").InnerText);
-                    listeURLversion.Add(balise.SelectSingleNode("URL_Version").InnerText);
-                    listeVersion.Add(balise.SelectSingleNode("version").InnerText);
-                    listeNbLigne.Add(balise.SelectSingleNode("nbLigne").InnerText);
+                    listecarte1.Add(balise.SelectSingleNode("URL_DL").InnerText);
+                    listecarte2.Add(balise.SelectSingleNode("URL_DL").InnerText);
+                    listecarte3.Add(balise.SelectSingleNode("URL_DL").InnerText);
+                    listecarte4.Add(balise.SelectSingleNode("URL_DL").InnerText);
+                    listecarte5.Add(balise.SelectSingleNode("URL_DL").InnerText);
+                    listeResultat.Add(balise.SelectSingleNode("nbLigne").InnerText);
                 }
 
                 listeUltime.Add(listeNom);
-                listeUltime.Add(listeURLDL);
-                listeUltime.Add(listeURLversion);
-                listeUltime.Add(listeVersion);
-                listeUltime.Add(listeNbLigne);
+                listeUltime.Add(listecarte1);
+                listeUltime.Add(listecarte2);
+                listeUltime.Add(listecarte3);
+                listeUltime.Add(listecarte4);
+                listeUltime.Add(listecarte5);
+                listeUltime.Add(listeResultat);
+
             }
 
             catch (Exception ex)
