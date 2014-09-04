@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="carte.cs" />
+    <Compile Include="ClassXML.cs" />
     <Compile Include="jeux.cs" />
     <Compile Include="poker.cs" />
     <Compile Include="Program.cs" />

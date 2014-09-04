@@ -11,14 +11,16 @@ namespace poker_objet
     class Poker
     {
         // Attributs
-        // Nom du fichier de scores
-        private string nomFichier = "scores.txt";
         // Liste des combinaisons possibles
         public enum combinaison { RIEN, PAIRE, DOUBLE_PAIRE, BRELAN, QUINTE, FULL, COULEUR, CARRE, QUINTE_FLUSH };
         // Numéro des cartes a échanger
         private int[] echange = { 0, 0, 0, 0 };
         // Le Jeux
         Jeux MonJeux;
+        // Resultat
+        public string resultat = "";
+        // Initialisation Class XML
+        ClassXML connexionXML = new ClassXML();
         // Constructeur
         public Poker()
         {
@@ -271,28 +273,36 @@ namespace poker_objet
             unJeux.AfficherMonJeu();
             Console.Write("RESULTAT - Vous avez : ");
             Console.ForegroundColor = ConsoleColor.Red;
+
+            string res = "";
+
             // Test de la combinaison
             switch (cherche_combinaison(unJeux))
             {
                 case combinaison.RIEN:
-                    Console.WriteLine("rien du tout... desole!"); break;
+                    res = "rien du tout... desole!"; break;
                 case combinaison.PAIRE:
-                    Console.WriteLine("une simple paire..."); break;
+                    res = "une simple paire..."; break;
                 case combinaison.DOUBLE_PAIRE:
-                    Console.WriteLine("une double paire; on peut esperer..."); break;
+                    res = "une double paire; on peut esperer..."; break;
                 case combinaison.BRELAN:
-                    Console.WriteLine("un brelan; pas mal..."); break;
+                    res = "un brelan; pas mal..."; break;
                 case combinaison.QUINTE:
-                    Console.WriteLine("une quinte; bien!"); break;
+                    res = "une quinte; bien!"; break;
                 case combinaison.FULL:
-                    Console.WriteLine("un full; ouahh!"); break;
+                    res = "un full; ouahh!"; break;
                 case combinaison.COULEUR:
-                    Console.WriteLine("une couleur; bravo!"); break;
+                    res = "une couleur; bravo!"; break;
                 case combinaison.CARRE:
-                    Console.WriteLine("un carre; champion!"); break;
+                    res = "un carre; champion!"; break;
                 case combinaison.QUINTE_FLUSH:
-                    Console.WriteLine("une quinte-flush; royal!"); break;
+                    res = "une quinte-flush; royal!"; break;
             };
+
+            resultat = res;
+
+            Console.WriteLine(res);
+
             Console.ForegroundColor = ConsoleColor.White;
         }
         // Affichage du menu
@@ -330,11 +340,11 @@ namespace poker_objet
             Carte[] unJeu = unJeux.MonJeux;
             bool correct = false;
             string res = "";
-            string nom, ligne = "";
-            StreamWriter f = null; //Anciennement BinaryWriter
-            FileStream fs = null;
-            fs = new FileStream(nomFichier, FileMode.Append, FileAccess.Write);
-            f = new StreamWriter(fs); //Anciennement BinaryWriter
+            string nom = "";
+           // StreamWriter f = null; //Anciennement BinaryWriter
+          //  FileStream fs = null;
+           // fs = new FileStream(nomFichier, FileMode.Append, FileAccess.Write);
+          //  f = new StreamWriter(fs); //Anciennement BinaryWriter
             do
             {
                 Console.Write("Enregistrer le jeu ? ( O / N ) : ");
@@ -349,13 +359,25 @@ namespace poker_objet
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
                 Console.Write("Vous pouvez saisir votre nom ( ou pseudo ) : ");
                 nom = Console.ReadLine().ToUpper();
+                string[] liste = new string[12];
+
+                liste[0] = nom;
+
+                int j = 1;
                 for (int i = 0; i < unJeu.Length; i++)
                 {
-                    ligne += ";" + unJeu[i].Famille.ToString() + ";" + unJeu[i].Valeur;
+                        liste[j] = unJeu[i].Famille.ToString();
+
+                        liste[j+1] = unJeu[i].Valeur.ToString();
+                    j += 2;
                 }
-                f.Write(nom + ligne + ";" + "\r\n");
+
+                liste[11] = resultat;
+
+                connexionXML.EcrireSurXML(liste[0], liste[1], liste[2], liste[3], liste[4], liste[5], liste[6], liste[7], liste[8], liste[9], liste[10], liste[11]);
+
             }
-            f.Close();
+            //f.Close();
         }
         // Afficher score
         public void AfficherScores()
@@ -429,6 +451,7 @@ namespace poker_objet
                 } while (position < tab.Length - 2);
             }
             br.Close();
+
             Console.ReadKey();
         }
     }
